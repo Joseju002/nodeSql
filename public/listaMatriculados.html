@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listado de matriculados</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="javascript:void(0)">Base de datos</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mynavbar">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Cursos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/centros">Centros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/alumnos">Alumnos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Matriculados</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/aprobados">Aprobados</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/modificar">Modificar</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <h1 class="text-center mt-5">Listado de matriculados</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">ID_ALUMNO</th>
+          <th scope="col">ALUMNO</th>
+          <th scope="col">ID_CURSO</th>
+          <th scope="col">CURSO</th>
+          <th scope="col">ESTADO</th>
+          <th scope="col">OPCIONES</th>
+        </tr>
+      </thead>
+      <tbody id="centros">
+
+      </tbody>
+
+    </table>
+  </div>
+  <script>
+    $(document).ready(function () {
+      function mostrarMatriculados() {
+        $.ajax({
+          url: "/listaMatriculados",
+          type: "GET",
+          dataType: "json",
+          success: function (data) {
+            console.log(data);
+            for (let i = 0; i < data.length; i++) {
+              var estado;
+              if (data[i].APROBADO == 1) {
+                estado = "Aprobado";
+              } else {
+                estado = "Suspenso";
+              }
+              $('#centros').append('<tr><th>' + data[i].ID_ALUMNO + '</th><td>' + data[i].NOMBRE_ALUMNO + '</td><th>' + data[i].ID_CURSO + '</th><td>' + data[i].NOMBRE_CURSO + '</td><td>' + estado + '</td><td><button id="eliminar" class="btn btn-danger">Eliminar</button></td></tr>');
+            }
+          }
+        });
+      }
+
+      mostrarMatriculados();
+
+      function eliminarUsuario() {
+        return new Promise((resolve) => {
+          Swal.fire({
+            title: "¿Desea eliminar el usuario?",
+            text: "Los cambios no se podrán revertir.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar",
+            reverseButtons: true
+          }).then((result) => {
+            resolve(result);
+          });
+        });
+      }
+
+      //Esto para delegar eventos en elementos que pueden ser creados dinámicamente después de que la página se haya cargado inicialmente
+      $(document).on('click', '#eliminar', async function () {
+        var idAlumno = $(this).closest('tr').find('th:eq(0)').text();
+        var idCurso = $(this).closest('tr').find('th:eq(1)').text();
+
+        // Mostrar los textos en la consola (puedes hacer lo que quieras con los textos)
+        console.log('ID del Alumno:', idAlumno);
+        console.log('ID del Curso:', idCurso);
+
+        const result = await eliminarUsuario();
+        if (result.isConfirmed) {
+          $.ajax({
+            url: "/eliminar/" + idAlumno + "&" + idCurso,
+            type: "DELETE",
+            dataType: "json",
+          });
+          await Swal.fire("Usuario eliminado", "", "success");
+          $('#centros').empty();
+          mostrarMatriculados();
+        } else if (result.isDenied) {
+          return;
+        }
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
