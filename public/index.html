@@ -1,75 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de cursos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listado de cursos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="javascript:void(0)">Base de datos</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="mynavbar">
-            <ul class="navbar-nav me-auto">
-              <li class="nav-item">
-                <a class="nav-link active" href="#">Cursos</a>
+  <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="javascript:void(0)">Base de datos</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mynavbar">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Cursos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/centros">Centros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/modificar">Modificar curso</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Alumnos</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/alumnos">Listado de alumnos</a></li>
+              <li><a class="dropdown-item" href="/matriculados">Alumnos matriculados</a></li>
+              <li>
+                <hr class="dropdown-divider">
+                </hr>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/centros">Centros</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/modificar">Modificar curso</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Alumnos</a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="/alumnos">Listado de alumnos</a></li>
-                  <li><a class="dropdown-item" href="/matriculados">Alumnos matriculados</a></li>
-                  <li><hr class="dropdown-divider"></hr></li>
-                  <li><a class="dropdown-item" href="/aprobados">Aprobados y suspensos</a></li>
-                </ul>
-              </li>
+              <li><a class="dropdown-item" href="/aprobados">Aprobados y suspensos</a></li>
             </ul>
-          </div>
-        </div>
-      </nav>
-    <div class="container">
-        <h1 class="text-center mt-5">Listado de cursos</h1>
-        <table class="table table-striped">
-            <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">NOMBRE</th>
-            <th scope="col">NIVEL</th>
-            <th scope="col">DESCRIPCIÓN</th>
-          </tr>
-        </thead>
-        <tbody id="alumnos">
-          
-        </tbody>
-      
-        </table>
+          </li>
+        </ul>
+      </div>
     </div>
-    <script>
-        $(document).ready(function(){
-            $.ajax({
-                url: "/listaCursos",
-                type: "GET",
-                dataType: "json",
-                success: function(data){
-                    console.log(data);
-                    for (let i = 0; i < data.length; i++) {
-                        $('#alumnos').append('<tr><th>'+data[i].ID+'</th><td>'+data[i].NOMBRE+'</td><td>'+data[i].NIVEL+'</td><td>'+data[i].DESCRIPCION+'</td></tr>');
-                    }
-                }
-            });
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  </nav>
+  <div class="container">
+    <h1 class="text-center mt-5">Listado de cursos</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">NOMBRE</th>
+          <th scope="col">NIVEL</th>
+          <th scope="col">DESCRIPCIÓN</th>
+        </tr>
+      </thead>
+      <tbody id="alumnos">
+
+      </tbody>
+
+    </table>
+  </div>
+  <script>
+    $(document).ready(function () {
+      $.ajax({
+        url: "/listaCursos",
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+          console.log(data);
+          var logo;
+
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].NOMBRE == "Java") {
+              logo = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-java" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M14 4.5V11h-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.521 15.175a1.3 1.3 0 0 1-.082-.466h.765a.6.6 0 0 0 .073.27.5.5 0 0 0 .454.246q.285 0 .422-.164.138-.165.138-.466V11.85h.79v2.725q0 .66-.357 1.005-.354.345-.984.345a1.6 1.6 0 0 1-.568-.094 1.1 1.1 0 0 1-.408-.266 1.1 1.1 0 0 1-.243-.39m3.972-.354-.314 1.028h-.8l1.342-3.999h.926l1.336 3.999h-.84l-.314-1.028zm1.178-.59-.49-1.616h-.035l-.49 1.617zm2.342 1.618h.952l1.327-3.999h-.878l-.888 3.138h-.038L8.59 11.85h-.917zm3.087-1.028-.314 1.028h-.8l1.342-3.999h.926l1.336 3.999h-.84l-.314-1.028zm1.178-.59-.49-1.616h-.035l-.49 1.617z"/>
+</svg>`
+            }
+            $('#alumnos').append('<tr><th>' + data[i].ID + '</th><td>' + logo + " " + data[i].NOMBRE + '</td><td>' + data[i].NIVEL + '</td><td>' + data[i].DESCRIPCION + '</td></tr>');
+          }
+        }
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>
