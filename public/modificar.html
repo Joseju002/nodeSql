@@ -16,37 +16,40 @@
 <body>
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
         <div class="container-fluid">
-          <a class="navbar-brand" href="javascript:void(0)">Base de datos</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="mynavbar">
-            <ul class="navbar-nav me-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="/">Cursos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/centros">Centros</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="#">Modificar curso</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Alumnos</a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="/alumnos">Listado de alumnos</a></li>
-                  <li><a class="dropdown-item" href="/matriculados">Alumnos matriculados</a></li>
-                  <li><hr class="dropdown-divider"></hr></li>
-                  <li><a class="dropdown-item" href="/aprobados">Aprobados y suspensos</a></li>
+            <a class="navbar-brand" href="javascript:void(0)">Base de datos</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mynavbar">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Cursos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/centros">Centros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Modificar curso</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Alumnos</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/alumnos">Listado de alumnos</a></li>
+                            <li><a class="dropdown-item" href="/matriculados">Alumnos matriculados</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                                </hr>
+                            </li>
+                            <li><a class="dropdown-item" href="/aprobados">Aprobados y suspensos</a></li>
+                        </ul>
+                    </li>
                 </ul>
-              </li>
-            </ul>
-          </div>
+            </div>
         </div>
-      </nav>
+    </nav>
     <div class="container">
         <h1 class="text-center mt-5">Modificar curso</h1>
-        <div class="mb-3 mt-3 text-center">
+        <div class="mb-3 mt-3 text-center" id="seleccion">
             <label for="select">Selecciona el curso:</label><br>
             <select id="listaCursos"></select>
         </div>
@@ -75,6 +78,26 @@
     <script>
         $(document).ready(function () {
             var id; var nombre; var nivel; var descripcion;
+
+            function obtenerParametro(nombre) {
+                nombre = nombre.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                var regex = new RegExp("[\\?&]" + nombre + "=([^&#]*)");
+                var resultados = regex.exec(location.search);
+                return resultados === null ? "" : decodeURIComponent(resultados[1].replace(/\+/g, " "));
+            };
+
+            // Verificar si el parámetro 'parametro' está presente en la URL
+            var valorParametro = obtenerParametro('id');
+
+            if (valorParametro !== '') {
+                // El parámetro está presente, haz algo con el valor
+                $('#seleccion').hide();
+                $('#infoCurso').show();
+                obtenerCurso(valorParametro);
+            } else {
+                // El parámetro no está presente
+                console.log('El parámetro "parametro" no está presente en la URL.');
+            }
 
             $.ajax({
                 url: "/listaCursos",
@@ -134,32 +157,7 @@
                 var opcionSeleccionada = $(this).val();
                 console.log('Opción seleccionada:', opcionSeleccionada);
 
-                $.ajax({
-                    url: "/obtenerCurso",
-                    type: "GET",
-                    dataType: "json",
-                    data: { parametro: opcionSeleccionada },
-                    success: function (data) {
-                        $("#infoCurso").show();
-                        console.log(data);
-                        $("#enviar").prop("disabled", true);
-
-                        id = data[0].ID;
-                        $("#id").val(id);
-
-                        nombre = data[0].NOMBRE;
-                        $("#nombre").val(nombre);
-                        $("#nombre").prop("disabled", false);
-
-                        nivel = data[0].NIVEL;
-                        $("#nivel").val(nivel);
-                        $("#nivel").prop("disabled", false);
-
-                        descripcion = data[0].DESCRIPCION;
-                        $("#descripcion").val(descripcion);
-                        $("#descripcion").prop("disabled", false);
-                    }
-                });
+                obtenerCurso(opcionSeleccionada);
             });
 
 
@@ -205,6 +203,35 @@
                 }
                 window.location.replace("/");
             });
+
+            function obtenerCurso(opcionSeleccionada) {
+                $.ajax({
+                    url: "/obtenerCurso",
+                    type: "GET",
+                    dataType: "json",
+                    data: { parametro: opcionSeleccionada },
+                    success: function (data) {
+                        $("#infoCurso").show();
+                        console.log(data);
+                        $("#enviar").prop("disabled", true);
+
+                        id = data[0].ID;
+                        $("#id").val(id);
+
+                        nombre = data[0].NOMBRE;
+                        $("#nombre").val(nombre);
+                        $("#nombre").prop("disabled", false);
+
+                        nivel = data[0].NIVEL;
+                        $("#nivel").val(nivel);
+                        $("#nivel").prop("disabled", false);
+
+                        descripcion = data[0].DESCRIPCION;
+                        $("#descripcion").val(descripcion);
+                        $("#descripcion").prop("disabled", false);
+                    }
+                });
+            }
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
