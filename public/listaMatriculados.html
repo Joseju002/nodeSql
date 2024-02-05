@@ -73,13 +73,15 @@
           success: function (data) {
             console.log(data);
             for (let i = 0; i < data.length; i++) {
-              var estado;
+              var estado; var color;
               if (data[i].APROBADO == 1) {
                 estado = "Aprobado";
+                color = "green";
               } else {
                 estado = "Suspenso";
+                color = "red";
               }
-              $('#centros').append('<tr><th>' + data[i].ID_ALUMNO + '</th><td>' + data[i].NOMBRE_ALUMNO + '</td><th>' + data[i].ID_CURSO + '</th><td>' + data[i].NOMBRE_CURSO + '</td><td>' + estado + '</td><td><button id="eliminar" class="btn btn-danger">Eliminar</button></td></tr>');
+              $('#centros').append('<tr><th>' + data[i].ID_ALUMNO + '</th><td>' + data[i].NOMBRE_ALUMNO + '</td><th>' + data[i].ID_CURSO + '</th><td>' + data[i].NOMBRE_CURSO + '</td><th style="color:' + color + ';">' + estado + '</th><td><button id="eliminar" class="btn btn-danger">Eliminar</button></td></tr>');
             }
           }
         });
@@ -121,7 +123,13 @@
             type: "DELETE",
             dataType: "json",
           });
-          await Swal.fire("Usuario eliminado", "", "success");
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Usuario eliminado",
+            showConfirmButton: false,
+            timer: 1500
+          });
           $('#centros').empty();
           mostrarMatriculados();
         } else if (result.isDenied) {
