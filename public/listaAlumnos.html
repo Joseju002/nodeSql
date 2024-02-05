@@ -8,36 +8,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="javascript:void(0)">Base de datos</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="mynavbar">
-            <ul class="navbar-nav me-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="/">Cursos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/centros">Centros</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="#">Alumnos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/matriculados">Matriculados</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/aprobados">Aprobados</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/modificar">Modificar</a>
-              </li>
+  <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="javascript:void(0)">Base de datos</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mynavbar">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Cursos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/centros">Centros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/modificar">Modificar curso</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">Alumnos</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Listado de alumnos</a></li>
+              <li><a class="dropdown-item" href="/matriculados">Alumnos matriculados</a></li>
+              <li><hr class="dropdown-divider"></hr></li>
+              <li><a class="dropdown-item" href="/aprobados">Aprobados y suspensos</a></li>
             </ul>
-          </div>
-        </div>
-      </nav>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
     <div class="container">
         <h1 class="text-center mt-5">Listado de alumnos</h1>
         <table class="table table-striped">

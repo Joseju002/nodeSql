@@ -14,36 +14,36 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="javascript:void(0)">Base de datos</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mynavbar">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Cursos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/centros">Centros</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/alumnos">Alumnos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/matriculados">Matriculados</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/aprobados">Aprobados</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Modificar</a>
-                    </li>
+          <a class="navbar-brand" href="javascript:void(0)">Base de datos</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="mynavbar">
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/">Cursos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/centros">Centros</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="#">Modificar curso</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Alumnos</a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="/alumnos">Listado de alumnos</a></li>
+                  <li><a class="dropdown-item" href="/matriculados">Alumnos matriculados</a></li>
+                  <li><hr class="dropdown-divider"></hr></li>
+                  <li><a class="dropdown-item" href="/aprobados">Aprobados y suspensos</a></li>
                 </ul>
-            </div>
+              </li>
+            </ul>
+          </div>
         </div>
-    </nav>
+      </nav>
     <div class="container">
         <h1 class="text-center mt-5">Modificar curso</h1>
         <div class="mb-3 mt-3 text-center">
