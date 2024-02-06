@@ -2,118 +2,137 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de aprobados</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listado de aprobados</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="javascript:void(0)">Base de datos</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="mynavbar">
-            <ul class="navbar-nav me-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="/">Cursos</a>
+  <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="javascript:void(0)">Base de datos</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mynavbar">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Cursos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/centros">Centros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/modificar">Modificar curso</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">Alumnos</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/alumnos">Listado de alumnos</a></li>
+              <li><a class="dropdown-item" href="/matriculados">Alumnos matriculados</a></li>
+              <li>
+                <hr class="dropdown-divider">
+                </hr>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/centros">Centros</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/modificar">Modificar curso</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">Alumnos</a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="/alumnos">Listado de alumnos</a></li>
-                  <li><a class="dropdown-item" href="/matriculados">Alumnos matriculados</a></li>
-                  <li><hr class="dropdown-divider"></hr></li>
-                  <li><a class="dropdown-item" href="#">Aprobados y suspensos</a></li>
-                </ul>
-              </li>
+              <li><a class="dropdown-item" href="#">Aprobados y suspensos</a></li>
             </ul>
-          </div>
-        </div>
-      </nav>
-    <div class="container">
-        <h1 class="text-center mt-5">Aprobados y suspensos</h1>
-        <div class="text-center mb-2">
-            Selecciona el curso:
-            <select name="curso" id="listaCursos"></select>
-            <div id="grafico"></div>
-        </div>
+          </li>
+        </ul>
+      </div>
     </div>
-    <script>
-        google.charts.load('current', { 'packages': ['corechart'] });
+  </nav>
+  <div class="container">
+    <h1 class="text-center mt-5">Aprobados y suspensos</h1>
+    <div class="text-center mb-2" id="cursos">
+      Selecciona el curso:
+      <select name="curso" id="listaCursos"></select>
+    </div>
+    <div id="grafico"></div>
+  </div>
+  <script src="js/funcionParametro.js"></script>
+  <script>
+    google.charts.load('current', { 'packages': ['corechart'] });
 
-        $(document).ready(function () {
-            $.ajax({
-                url: "/listaCursos",
-                type: "GET",
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    for (let i = 0; i < data.length; i++) {
-                        $('#listaCursos').append('<option value="' + data[i].ID + '">' + data[i].NOMBRE + ' - ' + data[i].NIVEL + '</option>');
-                    }
-                }
-            });
+    var valorParametro = obtenerParametro('id');
 
-            $('#listaCursos').change(function () {
-                var opcionSeleccionada = $(this).val();
-                console.log('Opción seleccionada:', opcionSeleccionada);
-                $.ajax({
-                    url: "/estadoAlumnos",
-                    type: "GET",
-                    dataType: "json",
-                    data: { parametro: opcionSeleccionada },
-                    success: function (data) {
-                        drawChart(data);
-                    }
-                });
-            });
+    if (valorParametro !== '') {
+      // El parámetro está presente, haz algo con el valor
+      $('#cursos').hide();
+      obtenerRatio(valorParametro);
+    } else {
+      // El parámetro no está presente
+      console.log('El parámetro "parametro" no está presente en la URL.');
+    }
 
-            // Función para dibujar el gráfico radial
-            function drawChart(data) {
-                // Crear un array de datos para Google Charts
-                var chartData = [['Resultado', 'Porcentaje']];
+    $(document).ready(function () {
+      $.ajax({
+        url: "/listaCursos",
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+          console.log(data);
+          for (let i = 0; i < data.length; i++) {
+            $('#listaCursos').append('<option value="' + data[i].ID + '">' + data[i].NOMBRE + ' - ' + data[i].NIVEL + '</option>');
+          }
+        }
+      });
 
-                // Añadir datos de aprobados
-                chartData.push(['Aprobados', data[0].APROBADOS]);
+      $('#listaCursos').change(function () {
+        var opcionSeleccionada = $(this).val();
+        console.log('Opción seleccionada:', opcionSeleccionada);
+        obtenerRatio(opcionSeleccionada);
+      });
+    });
 
-                // Añadir datos de suspendidos
-                chartData.push(['Suspensos', data[0].SUSPENSOS]);
+    function obtenerRatio(opcionSeleccionada) {
+      $.ajax({
+        url: "/estadoAlumnos",
+        type: "GET",
+        dataType: "json",
+        data: { parametro: opcionSeleccionada },
+        success: function (data) {
+          drawChart(data);
+        }
+      });
+    }
+
+    // Función para dibujar el gráfico radial
+    function drawChart(data) {
+      // Crear un array de datos para Google Charts
+      var chartData = [['Resultado', 'Porcentaje']];
+
+      // Añadir datos de aprobados
+      chartData.push(['Aprobados', data[0].APROBADOS]);
+
+      // Añadir datos de suspendidos
+      chartData.push(['Suspensos', data[0].SUSPENSOS]);
 
 
 
-                // Crear la tabla de datos
-                var dataTable = google.visualization.arrayToDataTable(chartData);
+      // Crear la tabla de datos
+      var dataTable = google.visualization.arrayToDataTable(chartData);
 
-                // Opciones del gráfico
-                var options = {
-                    pieHole: 0.4,
-                    width: '100%',  // Ancho del gráfico al 100% del contenedor
-                    height: 400,
-                };
+      // Opciones del gráfico
+      var options = {
+        pieHole: 0.4,
+        width: '100%',  // Ancho del gráfico al 100% del contenedor
+        height: 400,
+      };
 
-                // Crear e inicializar el gráfico
-                var chart = new google.visualization.PieChart(document.getElementById('grafico'));
-                chart.draw(dataTable, options);
-            }
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+      // Crear e inicializar el gráfico
+      var chart = new google.visualization.PieChart(document.getElementById('grafico'));
+      chart.draw(dataTable, options);
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>

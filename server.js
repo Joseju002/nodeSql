@@ -226,11 +226,6 @@ app.put('/modificar', (req, res) => {
     })
 });
 
-app.get('/', (req, res) => {
-    var contenido = fs.readFileSync('public/index.html', 'utf8');
-    res.setHeader('Content-Type', 'text/html');
-    res.send(contenido);
-});
 
 server.listen(port, () => {
     console.log('Servidor ejecutándose en el puerto ' + port);
