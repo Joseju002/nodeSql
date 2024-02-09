@@ -1,3 +1,4 @@
+//Función que obtiene el parámetro pasado por URL
 function obtenerParametro(nombre) {
     nombre = nombre.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + nombre + "=([^&#]*)");

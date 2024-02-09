@@ -59,17 +59,20 @@
   <script>
     google.charts.load('current', { 'packages': ['corechart'] });
 
+    //Obtenemos el parametro por URL
     var valorParametro = obtenerParametro('id');
 
+    //Si se ha pasado un parámetro
     if (valorParametro !== '') {
-      // El parámetro está presente, haz algo con el valor
+      // El parámetro está, se esconde el desplegable
       $('#cursos').hide();
       obtenerRatio(valorParametro);
     } else {
       // El parámetro no está presente
-      console.log('El parámetro "parametro" no está presente en la URL.');
+      console.log('No hay parametro');
     }
 
+    //Obtenemos los cursos para hacer la lista desplegable
     $(document).ready(function () {
       $.ajax({
         url: "/listaCursos",
@@ -83,6 +86,7 @@
         }
       });
 
+      //Al elegir el curso en el desplegable
       $('#listaCursos').change(function () {
         var opcionSeleccionada = $(this).val();
         console.log('Opción seleccionada:', opcionSeleccionada);
@@ -90,6 +94,7 @@
       });
     });
 
+    //Con esta función mostramos la información en el gráfico dependiendo de lo que hayamos indicado
     function obtenerRatio(opcionSeleccionada) {
       $.ajax({
         url: "/estadoAlumnos",
@@ -110,10 +115,8 @@
       // Añadir datos de aprobados
       chartData.push(['Aprobados', data[0].APROBADOS]);
 
-      // Añadir datos de suspendidos
+      // Añadir datos de suspensos
       chartData.push(['Suspensos', data[0].SUSPENSOS]);
-
-
 
       // Crear la tabla de datos
       var dataTable = google.visualization.arrayToDataTable(chartData);
@@ -121,7 +124,7 @@
       // Opciones del gráfico
       var options = {
         pieHole: 0.4,
-        width: '100%',  // Ancho del gráfico al 100% del contenedor
+        width: '100%',
         height: 400,
       };
 

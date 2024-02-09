@@ -69,6 +69,7 @@
   <script>
     $(document).ready(function () {
       function mostrarMatriculados() {
+        //Obtenemos los matriculados
         $.ajax({
           url: "/listaMatriculados",
           type: "GET",
@@ -77,6 +78,8 @@
             console.log(data);
             for (let i = 0; i < data.length; i++) {
               var estado; var color; var logoEstado; var logoCurso;
+
+              //Según su nombre, se muestra un icono u otro
               if (data[i].NOMBRE_CURSO == "Java") {
                 logoCurso = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-java" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14 4.5V11h-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.521 15.175a1.3 1.3 0 0 1-.082-.466h.765a.6.6 0 0 0 .073.27.5.5 0 0 0 .454.246q.285 0 .422-.164.138-.165.138-.466V11.85h.79v2.725q0 .66-.357 1.005-.354.345-.984.345a1.6 1.6 0 0 1-.568-.094 1.1 1.1 0 0 1-.408-.266 1.1 1.1 0 0 1-.243-.39m3.972-.354-.314 1.028h-.8l1.342-3.999h.926l1.336 3.999h-.84l-.314-1.028zm1.178-.59-.49-1.616h-.035l-.49 1.617zm2.342 1.618h.952l1.327-3.999h-.878l-.888 3.138h-.038L8.59 11.85h-.917zm3.087-1.028-.314 1.028h-.8l1.342-3.999h.926l1.336 3.999h-.84l-.314-1.028zm1.178-.59-.49-1.616h-.035l-.49 1.617z"/></svg>`
               } else if (data[i].NOMBRE_CURSO == "Python") {
@@ -95,6 +98,7 @@
                 logoCurso = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/></svg>`
               }
 
+              //En base a si el alumno está o no aprobado, cambia el color y el icono
               if (data[i].APROBADO == 1) {
                 estado = "Aprobado";
                 color = "green";
@@ -135,27 +139,27 @@
         var idAlumno = $(this).closest('tr').find('th:eq(0)').text();
         var idCurso = $(this).closest('tr').find('th:eq(1)').text();
 
-        // Mostrar los textos en la consola (puedes hacer lo que quieras con los textos)
         console.log('ID del Alumno:', idAlumno);
         console.log('ID del Curso:', idCurso);
 
+        //Esperamos a que el usuario confirme si se quiere eliminar o no el alumno
         const result = await eliminarUsuario();
         if (result.isConfirmed) {
-          $.ajax({
-            url: "/eliminar/" + idAlumno + "&" + idCurso,
+          $.ajax({ //Si eliminamos al alumno
+            url: "/eliminar/" + idAlumno + "&" + idCurso, //Lo eliminamos en su dirección de Node
             type: "DELETE",
             dataType: "json",
           });
-          Swal.fire({
+          Swal.fire({ //Mostramos el mensaje de que ha sido borrado
             position: "top-end",
             icon: "success",
             title: "Usuario eliminado",
             showConfirmButton: false,
             timer: 1500
           });
-          $('#centros').empty();
-          mostrarMatriculados();
-        } else if (result.isDenied) {
+          $('#centros').empty(); //Vaciamos alumnos
+          mostrarMatriculados(); //Los volvemos a mostrar
+        } else if (result.isDenied) { //Si se decide que no se eliminará, no hacemos nada
           return;
         }
       });

@@ -78,21 +78,23 @@
     <script src="js/funcionParametro.js"></script>
     <script>
         $(document).ready(function () {
+            //Aquí guardaremos la información de los parametros que obtendremos de la consulta
             var id; var nombre; var nivel; var descripcion;
 
             // Verificar si el parámetro 'parametro' está presente en la URL
             var valorParametro = obtenerParametro('id');
 
             if (valorParametro !== '') {
-                // El parámetro está presente, haz algo con el valor
+                // El parámetro está , ocultamos el desplegable y mostramos el formulario
                 $('#seleccion').hide();
                 $('#infoCurso').show();
                 obtenerCurso(valorParametro);
             } else {
-                // El parámetro no está presente
+                // El parámetro no está, seguirá con su comportamiento normal
                 console.log('El parámetro "parametro" no está presente en la URL.');
             }
 
+            //Obtenemos los cursos
             $.ajax({
                 url: "/listaCursos",
                 type: "GET",
@@ -100,12 +102,13 @@
                 success: function (data) {
                     console.log(data);
                     for (let i = 0; i < data.length; i++) {
+                        //Los generamos dinámicamente
                         $('#listaCursos').append('<option value="' + data[i].ID + '">' + data[i].ID + ' - ' + data[i].NOMBRE + ' ' + data[i].NIVEL + '</option>');
                     }
                 }
             });
 
-            //Función que muestra el mensaje de confirmación
+            //Función que muestra el mensaje de confirmación de si se va a salir o quedarse
             function salirNoSalir() {
                 return new Promise((resolve) => {
                     Swal.fire({
@@ -124,7 +127,7 @@
                 });
             }
 
-            //Función que muestra el mensaje de confirmación
+            //Función que muestra el mensaje de confirmación para guardar el curso
             function guardarCurso() {
                 return new Promise((resolve) => {
                     Swal.fire({
@@ -140,9 +143,10 @@
                 });
             }
 
+            //Si se cambia de curso
             $('#listaCursos').change(async function () {
                 if ($('#enviar').prop('disabled') == false) {
-                    const result = await salirNoSalir(); //Asíncrono. El programa no se ejecuta hasta que se confirme.
+                    const result = await salirNoSalir(); //Le preguntamos al usuario si quiere no guardar los datos
                     if (result.isConfirmed) {
                         return;
                     }
@@ -151,21 +155,23 @@
                 var opcionSeleccionada = $(this).val();
                 console.log('Opción seleccionada:', opcionSeleccionada);
 
-                obtenerCurso(opcionSeleccionada);
+                obtenerCurso(opcionSeleccionada); //Según lo elegido, obtenemos el curso
             });
 
 
+            //Si modificamos el formulario
             $("#infoCurso").on("input", function () {
                 // Verifica si alguno de los campos tiene algún valor
                 if (descripcion == $("#descripcion").val() && nivel == $("#nivel").val() && nombre == $("#nombre").val() && id == $("#id").val()) {
-                    // Si coinciden, deshabilita el botón
+                    // Si coinciden, deshabilita el botón (no guardaremos los cambios puesto que serán iguales)
                     $("#enviar").prop("disabled", true);
                 } else {
-                    // Si no coinciden, habilita el botón
+                    // Si no coinciden, habilita el botón (ahora se podrán guardar cambios)
                     $("#enviar").prop("disabled", false);
                 }
             });
 
+            //Si al pulsar un botón para cambiar de página
             $('.nav-link:not(.active)').click(async function (event) {
                 event.preventDefault(); // Prevenir el comportamiento por defecto del enlace
 
@@ -177,37 +183,44 @@
                     }
                 }
 
-                // Continuar con el comportamiento por defecto del enlace si es necesario
+                // Continuar con el comportamiento por defecto si el usuario decide no salir
                 window.location.href = $(this).attr('href');
             });
 
+            //Si enviamos la información
             $('#enviar').click(async function () {
-                const result = await guardarCurso();
-                if (result.isConfirmed) {
+                const result = await guardarCurso(); //Preguntamos si quiere guardar los cambios
+                if (result.isConfirmed) { //Si dice que si
+                    //Hacemos la petición y modificamos el curso
                     $.ajax({
                         url: "/modificarCurso",
                         type: "PUT",
                         dataType: "json",
                         data: { nombre: $("#nombre").val(), nivel: $("#nivel").val(), descripcion: $("#descripcion").val(), id: $("#id").val() },
                     });
+                    //Se mostrará el mensaje de que se ha modificado el curso
                     await Swal.fire("Curso modificado", "", "success");
                     console.log("hecho");
-                } else if (result.isDenied) {
-                    return;
+                } else if (result.isDenied) { //Si dice que no
+                    return; //Se interrumpe
                 }
-                window.location.replace("/");
+                window.location.replace("/"); //Vamos a la página de cursos
             });
 
+            //Petición de obtener los cursos, simplificado en una función
             function obtenerCurso(opcionSeleccionada) {
+                //Obtenemos el curso
                 $.ajax({
                     url: "/obtenerCurso",
                     type: "GET",
                     dataType: "json",
                     data: { parametro: opcionSeleccionada },
                     success: function (data) {
-                        $("#infoCurso").show();
+                        $("#infoCurso").show(); //Mostramos el formulario
                         console.log(data);
                         $("#enviar").prop("disabled", true);
+
+                        //Imprimimos dinámicamente la información de la consulta en el formulario
 
                         id = data[0].ID;
                         $("#id").val(id);

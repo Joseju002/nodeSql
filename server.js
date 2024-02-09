@@ -186,47 +186,6 @@ app.delete('/eliminar/:idAlumno&:idCurso', (req, res) => {
     })
 });
 
-// Obtener todos los datos de una tabla con un POST (con parametros)
-app.post('/insertar', (req, res) => {
-    const { nombre, precio, descripcion } = req.body;
-    const params = req.body;
-    console.log("Devuelve: " + params);
-    pool.getConnection((err, connection) => {
-        connection.query("INSERT INTO producto SET ?", params, (err, rows) => {
-            connection.release() // return the connection to pool
-
-            if (!err) {
-                res.json(rows);
-            } else {
-                console.log("Error por aqui")
-            }
-        })
-    })
-})
-
-app.put('/modificar', (req, res) => {
-    pool.getConnection((err, connection) => {
-        if (err) throw err
-        console.log(`connected as id ${connection.threadId}`)
-
-        const { nombre, precio, descripcion, id } = req.body
-
-        connection.query('UPDATE producto SET nombre = ?, precio = ?, descripcion = ? WHERE id = ?', [nombre, precio, descripcion, id], (err, rows) => {
-            connection.release() // return the connection to pool
-
-            if (!err) {
-                res.send(`Beer with the name: ${nombre} has been added.`);
-            } else {
-                console.log(err);
-            }
-
-        })
-
-        console.log(req.body)
-    })
-});
-
-
 server.listen(port, () => {
     console.log('Servidor ejecutándose en el puerto ' + port);
 });

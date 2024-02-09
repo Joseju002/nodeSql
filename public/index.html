@@ -56,6 +56,7 @@
   </div>
   <script>
     $(document).ready(function () {
+      //Obtenemos los cursos
       $.ajax({
         url: "/listaCursos",
         type: "GET",
@@ -63,6 +64,7 @@
         success: function (data) {
           console.log(data);
           var logo;
+          //Dependiendo del nombre, se mostrará una imagen u otra
           for (let i = 0; i < data.length; i++) {
             if (data[i].NOMBRE == "Java") {
               logo = "java";
@@ -86,25 +88,20 @@
               logo = "nada";
             }
 
+            //Generamos dinámicamente las 'cards', con los botones de modificar y ver ratio de notas
             $('.row').append(`<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 mt-5">
-               
                <div class="box-part text-center">
-                             
                 <img width="100" src="images/${logo}.png">
-                             
                  <div class="title">
                    <h3>${data[i].NOMBRE}</h3>
                  </div>
-                             
-                 <div class="text">
+                <div class="text">
                    <h4>${data[i].NIVEL}</h4>
                    <span>${data[i].DESCRIPCION}</span>
-                 </div>
-
-                 <p><a class="btn btn-primary mt-1" href="/modificar?id=${data[i].ID}">Modificar</a> <a class="btn btn-success mt-1" href="/aprobados?id=${data[i].ID}">Notas</a></p>
-                             
                 </div>
-             </div>`);
+                 <p><a class="btn btn-primary mt-1" href="/modificar?id=${data[i].ID}">Modificar</a> <a class="btn btn-success mt-1" href="/aprobados?id=${data[i].ID}">Notas</a></p>
+                </div>
+              </div>`);
           }
         }
       });

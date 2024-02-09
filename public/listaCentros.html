@@ -60,6 +60,7 @@
   </div>
   <script>
     $(document).ready(function () {
+      //Obtenemos los centros
       $.ajax({
         url: "/listaCentros",
         type: "GET",
@@ -67,6 +68,7 @@
         success: function (data) {
           console.log(data);
           for (let i = 0; i < data.length; i++) {
+            //Los mostramos dinámicamente en una tabla
             $('#centros').append('<tr><th>' + data[i].ID + '</th><td>' + data[i].NOMBRE + '</td></tr>');
           }
         }
